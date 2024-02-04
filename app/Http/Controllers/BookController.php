@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use App\Models\Reservation;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+
 
 class BookController extends Controller
 {
@@ -36,6 +42,18 @@ class BookController extends Controller
         return view('bookslist', compact('books'));
     }
 
+    public function showDetails($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return redirect()->route('show')->with('error', 'Book not found.');
+        }
+
+        return view('details', compact('book'));
+    }
+
+
     public function delete($id)
     {
         Book::find($id)->delete();
@@ -61,5 +79,76 @@ class BookController extends Controller
         $book->save();
 
         return redirect()->route('show');
+    }
+
+
+    // public function reserveBook($bookId)
+    // {
+    //     $userId = 1;
+
+    //     $user = User::find($userId);
+
+    //     if (!$user->reservations()->where('id_book', $bookId)->exists()) {
+
+    //         $reservation = new Reservation(['id_user' => $user->id]);
+    //         Book::find($bookId)->reservations()->save($reservation);
+    //     }
+
+    //     return redirect()->route('show')->with('success', 'Book reserved successfully.');
+    // }
+
+    public function reserveBook($bookId)
+    {
+
+        $book = new Reservation();
+
+        $book->id_book = $bookId;
+        $book->id_user = 1;
+        $book->save();
+
+        return redirect()->route('show')->with('success', 'Book reserved successfully.');
+    }
+
+    // public function unreserve($id)
+    // {
+    //     Reservation::find($id)->delete();
+    //     return redirect()->route('show');
+    // }
+
+    public function reservedBooks()
+    {
+        $userId = 1;
+
+        $user = User::find($userId);
+
+        $reservedBooks = $user->reservations()->with('book')->get()->pluck('book');
+
+        return view('reservations', compact('reservedBooks'));
+    }
+
+    public function details($id)
+    {
+        $book = Book::find($id);
+        return view('details', compact('book'));
+    }
+
+    public function unreserveBook($bookId)
+    {
+        $userId = 1;
+
+        $user = User::find($userId);
+
+        $reservation = $user->reservations()->where('id_book', $bookId)->first();
+
+
+        if ($reservation) {
+
+            $reservation->delete();
+
+
+            return redirect()->route('show');
+        } else {
+            return redirect()->route('show');
+        }
     }
 }

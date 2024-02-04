@@ -27,9 +27,15 @@ Route::get('/bookslist', [BookController::class , 'ShowBookslist'])->name('show'
 
 Route::delete('/delete/{id}' , [BookController::class , 'delete'])->name('delete.book');
 
+Route::get('/books/{id}', [BookController::class, 'showDetails'])->name('book.details');
+
 
 
 Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit.book');
 Route::put('/update/{id}', [BookController::class, 'update'])->name('update.book');
 
+
+Route::post('/reserve/{id}', [BookController::class, 'reserveBook'])->name('reserve.book');
+Route::get('/reservations', [BookController::class, 'reservedBooks'])->name('reservations');
+Route::post('/unreserve/{id}', [BookController::class, 'unreserveBook'])->name('unreserve.book');
 
