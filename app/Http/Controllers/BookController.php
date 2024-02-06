@@ -57,7 +57,7 @@ class BookController extends Controller
     public function delete($id)
     {
         Book::find($id)->delete();
-        return redirect()->route('show');
+        return redirect()->route('bookslist');
     }
 
     public function edit($id)
@@ -78,7 +78,7 @@ class BookController extends Controller
         $book->setBookTitle($request->input('title'));
         $book->save();
 
-        return redirect()->route('show');
+        return redirect()->route('bookslist');
     }
 
 
@@ -106,7 +106,7 @@ class BookController extends Controller
         $book->id_user = 1;
         $book->save();
 
-        return redirect()->route('show')->with('success', 'Book reserved successfully.');
+        return redirect()->route('reservations')->with('success', 'Book reserved successfully.');
     }
 
     // public function unreserve($id)
@@ -146,9 +146,9 @@ class BookController extends Controller
             $reservation->delete();
 
 
-            return redirect()->route('show');
+            return redirect()->route('reservations');
         } else {
-            return redirect()->route('show');
+            return redirect()->route('reservations');
         }
     }
 }
