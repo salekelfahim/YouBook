@@ -15,6 +15,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BookController extends Controller
 {
+    
+    public function ShowAddBooks()
+    {
+        return view('addbook');
+    }
+    
+    
     public function addBook(Request $request)
     {
         $request->validate([

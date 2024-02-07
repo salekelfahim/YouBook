@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Models\Book;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BookController::class , 'ShowBooks'])->name('show');
 
-Route::get('/addbook', function () {
-    return view('addbook');
-});
+Route::get('/addbook', [BookController::class , 'ShowAddBooks']);
 
 Route::post('/addbook', [BookController::class , 'addBook'])->name('addBook');
 
@@ -32,10 +31,22 @@ Route::get('/books/{id}', [BookController::class, 'showDetails'])->name('book.de
 
 
 Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit.book');
-Route::put('/update/{id}', [BookController::class, 'update'])->name('update.book');
+Route::put('/upgdate/{id}', [BookController::class, 'update'])->name('update.book');
 
 
 Route::post('/reserve/{id}', [BookController::class, 'reserveBook'])->name('reserve.book');
 Route::get('/reservations', [BookController::class, 'reservedBooks'])->name('reservations');
 Route::post('/unreserve/{id}', [BookController::class, 'unreserveBook'])->name('unreserve.book');
+
+
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class,'register']);
+
+
+Route::get('/login', [AuthController::class,'showLogin'])->name('login');
+Route::post('/login', [AuthController::class,'login']);
+
+
+Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+
 
