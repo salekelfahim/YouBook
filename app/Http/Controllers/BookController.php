@@ -15,13 +15,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class BookController extends Controller
 {
-    
+
     public function ShowAddBooks()
     {
         return view('addbook');
     }
-    
-    
+
+
     public function addBook(Request $request)
     {
         $request->validate([
@@ -39,7 +39,7 @@ class BookController extends Controller
 
     public function ShowBooks()
     {
-        $books = Book::all();
+        $books = Book::where('status', 0)->get();
         return view('home', compact('books'));
     }
 
@@ -104,17 +104,33 @@ class BookController extends Controller
     //     return redirect()->route('show')->with('success', 'Book reserved successfully.');
     // }
 
-    public function reserveBook($bookId)
+    public function reserveBook($bookId, Request $request)
     {
+        $request->validate([
+            'end_date' => 'required|date',
+        ]);
+
+        $startDate = now();
+        $endDate = $request->input('end_date');
+
+        if ($endDate < $startDate) {
+            return redirect()->route('show')->with('error', 'Invalid end date.');
+        }
 
         $book = new Reservation();
 
         $book->id_book = $bookId;
         $book->id_user = 1;
+        $book->end_date = $endDate;
+
         $book->save();
+
+        Book::where('id', $bookId)->update(['status' => 1]);
+        
 
         return redirect()->route('reservations')->with('success', 'Book reserved successfully.');
     }
+
 
     // public function unreserve($id)
     // {
@@ -152,6 +168,7 @@ class BookController extends Controller
 
             $reservation->delete();
 
+            Book::where('id', $bookId)->update(['status' => 0]);
 
             return redirect()->route('reservations');
         } else {

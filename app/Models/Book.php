@@ -12,6 +12,7 @@ class Book extends Model
     protected $fillable = [
         'title',
         'content',
+        'status',
     ];
 
     public function getBookTitle()
