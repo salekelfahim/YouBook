@@ -21,40 +21,58 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/addbook">Add Book</a>
-                    </li>
+                    @if (session()->has('user'))
                     <li class="nav-item">
                         <a class="nav-link" href="/reservations">Reservations</a>
                     </li>
+                    @if (session('user')->role_id == 2)
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addbook">Add Book</a>
+                    </li>
+                    @elseif (session('user')->role_id == 1)
                     <li class="nav-item">
                         <a class="nav-link" href="/bookslist">Books List</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/userslist">Users List</a>
+                    </li>
                 </ul>
-                <div class="d-flex text-light">
-                    <a class="nav-link active" aria-current="page" href="/register">Register</a>
+                @endif
+
+                <div class="d-flex text-light me-2">
+                    <span class="nav-link active" aria-current="page">- {{ session('user')->name }} -</span>
                 </div>
-                <div class="d-flex text-light">
-                    <a class="nav-link active" aria-current="page" href="/login">Login</a>
-                </div>
-                <div class="d-flex text-light">
+
+
+                <div class="d-flex text-light me-2">
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
                         <button type="submit" class="nav-link active" aria-current="page">Logout</button>
                     </form>
                 </div>
+                @else
+                <div class="d-flex text-light me-2">
+                    <a class="nav-link active" aria-current="page" href="/register">Register</a>
+                </div>
+                <div class="d-flex text-light me-2">
+                    <a class="nav-link active" aria-current="page" href="/login">Login</a>
+                </div>
+                @endif
 
             </div>
         </div>
     </nav>
 
 
+
     <div class="container">
         @yield('content')
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

@@ -13,8 +13,8 @@
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                <form action="{{route('register')}}" id ="form" class="mx-1 mx-md-4" method="post">
-                @csrf
+                <form action="{{route('register')}}" id="form" class="mx-1 mx-md-4" method="post">
+                  @csrf
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -57,8 +57,7 @@
               </div>
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
-                <img src="{{ asset('images/istockphoto-1461129136-612x612.jpg') }}"
-                  class="img-fluid" alt="Image">
+                <img src="{{ asset('images/istockphoto-1461129136-612x612.jpg') }}" class="img-fluid" alt="Image">
 
               </div>
             </div>

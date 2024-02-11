@@ -4,6 +4,7 @@ use App\Http\Controllers\BookController;
 use App\Models\Book;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,22 +17,13 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', [BookController::class , 'ShowBooks'])->name('show');
-
-Route::get('/addbook', [BookController::class , 'ShowAddBooks']);
-
-Route::post('/addbook', [BookController::class , 'addBook'])->name('addBook');
-
-Route::get('/bookslist', [BookController::class , 'ShowBookslist'])->name('bookslist');
-
-Route::delete('/delete/{id}' , [BookController::class , 'delete'])->name('delete.book');
-
-Route::get('/books/{id}', [BookController::class, 'showDetails'])->name('book.details');
+Route::get('/', [BookController::class, 'ShowBooks'])->name('show');
 
 
-
-Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit.book');
-Route::put('/upgdate/{id}', [BookController::class, 'update'])->name('update.book');
+Route::group(['middleware' => ['writer']], function () {
+    Route::get('/addbook', [BookController::class, 'ShowAddBooks']);
+    Route::post('/addbook', [BookController::class, 'addBook'])->name('addBook');
+});
 
 
 Route::post('/reserve/{id}', [BookController::class, 'reserveBook'])->name('reserve.book');
@@ -40,13 +32,26 @@ Route::post('/unreserve/{id}', [BookController::class, 'unreserveBook'])->name('
 
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class,'register']);
+Route::post('/register', [AuthController::class, 'register']);
 
 
-Route::get('/login', [AuthController::class,'showLogin'])->name('login');
-Route::post('/login', [AuthController::class,'login']);
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
 
-Route::post('/logout', [AuthController::class,'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('/bookslist', [BookController::class, 'ShowBookslist'])->name('bookslist');
+    Route::delete('/delete/{id}', [BookController::class, 'delete'])->name('delete.book');
+    Route::get('/books/{id}', [BookController::class, 'showDetails'])->name('book.details');
+
+    Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit.book');
+    Route::put('/upgdate/{id}', [BookController::class, 'update'])->name('update.book');
+
+    Route::get('/userslist', [UserController::class, 'ShowUsers']);
+    Route::get('/userslist', [UserController::class, 'ShowUserslist'])->name('userslist');
+    Route::delete('/deleteuser/{userId}', [UserController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('/updaterole/{userId}', [UserController::class, 'updateRole'])->name('updateRole');
+});
